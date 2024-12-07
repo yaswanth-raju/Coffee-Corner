@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Place Order</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        form {
+            border: 1px solid black;
+            padding: 20px;
+            width: 300px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Place Your Order</h1>
+<form th:action="@{/orders}" th:object="${orderForm}" method="post">
+  <h2>Main Products</h2>
+  <table>
+    <tr>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Volume</th>
+      <th>Price</th>
+    </tr>
+    <tr th:each="product : ${products}">
+      <td th:if="${product.productType == 'CORE'}">
+        <input type="checkbox" th:field="*{mainProducts}" th:value="${product.id}" />
+      </td>
+      <td th:if="${product.productType == 'CORE'}" th:text="${product.name}">Name</td>
+      <td th:if="${product.productType == 'CORE'}" th:text="${product.volume}">Volume</td>
+      <td th:if="${product.productType == 'CORE'}" th:text="${product.price}">Price</td>
+    </tr>
+  </table>
+  <h2>Addons</h2>
+  <table>
+    <tr>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Volume</th>
+      <th>Price</th>
+    </tr>
+    <tr th:each="product : ${products}">
+      <td th:if="${product.productType == 'ADDON'}">
+        <input type="checkbox" th:field="*{addons}" th:value="${product.id}" />
+      </td>
+      <td th:if="${product.productType == 'ADDON'}" th:text="${product.name}">Name</td>
+      <td th:if="${product.productType == 'ADDON'}" th:text="${product.volume}">Volume</td>
+      <td th:if="${product.productType == 'ADDON'}" th:text="${product.price}">Price</td>
+    </tr>
+  </table>
+  <button type="submit">Place Order</button>
+</form>
+
+<h2>Navigation</h2>
+<a href="/products">Go to Products Page</a>
+</body>
+</html>
