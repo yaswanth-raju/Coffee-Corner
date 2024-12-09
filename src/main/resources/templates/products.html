@@ -40,6 +40,7 @@
         <th>Volume</th>
         <th>Price</th>
         <th>Type</th>
+        <th>Addons</th>
     </tr>
     <tr th:each="product : ${products}">
         <td th:text="${product.id}">ID</td>
@@ -47,6 +48,11 @@
         <td th:text="${product.volume}">Volume</td>
         <td th:text="${product.price}">Price</td>
         <td th:text="${product.productType}">Type</td>
+        <td>
+            <ul>
+                <li th:each="addon : ${product.addons}" th:text="${addon.name}"></li>
+            </ul>
+        </td>
     </tr>
 </table>
 

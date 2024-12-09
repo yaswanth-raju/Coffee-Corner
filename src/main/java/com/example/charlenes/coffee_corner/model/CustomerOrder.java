@@ -1,5 +1,6 @@
 package com.example.charlenes.coffee_corner.model;
 
+import com.example.charlenes.coffee_corner.service.OrderForm;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class CustomerOrder {
 
     private LocalDateTime date;
     private double totalPrice;
+
 
     @PrePersist
     @PreUpdate

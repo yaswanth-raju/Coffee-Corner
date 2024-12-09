@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @Entity
@@ -16,13 +18,18 @@ public class Product {
     private String name;
     private String volume;
     private double price;
+
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
-    public Product(String name, String volume, double price, ProductType productType) {
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    private List<Addon> addons;
+
+    public Product(String name, String volume, double price, ProductType productType,List<Addon> addons) {
         this.name = name;
         this.volume = volume;
         this.price = price;
         this.productType = productType;
+        this.addons = addons;
     }
 }
