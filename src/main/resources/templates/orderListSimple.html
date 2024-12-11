@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>List of Orders</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .order {
+            border: 1px solid black;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .order-header, .order-item {
+            margin-bottom: 10px;
+        }
+        .order-item-details, .order-addons {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>List of Orders</h1>
+<div th:each="order : ${orders}" class="order">
+  <div class="order-header">
+    <h2>Order ID: <span th:text="${order.id}"></span></h2>
+    <p>
+      Date: <span th:text="${order.date}"></span><br />
+      Customer ID: <span th:text="${order.customerId}"></span><br />
+      Total Price: <span th:text="${order.totalPrice}"></span>
+    </p>
+  </div>
+  <div th:each="item : ${order.orderItems}" class="order-item">
+    <div class="order-item-details">
+      <p>
+        <strong>Product:</strong> <span th:text="${item.product.name}"></span><br />
+        Volume: <span th:text="${item.product.volume}"></span><br />
+        Price: <span th:text="${item.product.price}"></span><br />
+        Quantity: <span th:text="${item.quantity}"></span><br />
+        Item Total Price: <span th:text="${item.totalPrice}"></span>
+      </p>
+    </div>
+    <div th:if="${item.addons != null && !item.addons.isEmpty()}" class="order-addons">
+      <h4>Addons:</h4>
+      <ul>
+        <li th:each="addon : ${item.addons}" th:text="${addon.name} + ' - ' + ${addon.price}"></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>Navigation</h2>
+<a href="/orders">Place a New Order</a>
+</body>
+</html>

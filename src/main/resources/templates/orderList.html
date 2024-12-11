@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of Orders</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .order {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .order-header {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        .order-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #4CAF50;
+        }
+        .order-item {
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        .order-item-content {
+            display: flex;
+            justify-content: space-between;
+        }
+        .order-item-details, .order-addons {
+            width: 48%;
+        }
+        .order-item-details p, .order-addons ul {
+            margin: 5px 0;
+        }
+        .order-addons ul {
+            list-style: none;
+            padding: 0;
+        }
+        .order-addons li {
+            background: #e0f7fa;
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .item-total {
+            font-weight: bold;
+            color: #ff5722;
+            margin-top: 10px;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .navigation a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>List of Orders</h1>
+    <div th:each="order : ${orders}" class="order">
+        <div class="order-header">
+            <h2>Order ID: <span th:text="${order.id}"></span></h2>
+            <p>
+                Date: <span th:text="${order.date}"></span><br />
+                Customer ID: <span th:text="${order.customerId}"></span><br />
+                Total Price: <span th:text="${order.totalPrice}"></span> CHF
+            </p>
+        </div>
+        <div th:each="item : ${order.orderItems}" class="order-item">
+            <div class="order-item-content">
+                <div class="order-item-details">
+                    <p>
+                        <strong>Product:</strong> <span th:text="${item.product.name}"></span><br />
+                        Volume: <span th:text="${item.product.volume}"></span><br />
+                        Price: <span th:text="${item.product.price}"></span> CHF<br />
+                        Quantity: <span th:text="${item.quantity}"></span>
+                    </p>
+                </div>
+                <div th:if="${item.addons != null && !item.addons.isEmpty()}" class="order-addons">
+                    <h4>Addons:</h4>
+                    <ul>
+                        <li th:each="addon : ${item.addons}" th:text="${addon.name} + ' -' + ${addon.price}+' CHF'"></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="item-total">Item Total Price: <span th:text="${item.totalPrice}"></span> CHF</p>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <a href="/orders">Place a New Order</a>
+    </div>
+</div>
+</body>
+</html>

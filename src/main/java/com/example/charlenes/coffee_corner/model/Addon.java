@@ -19,12 +19,12 @@ public class Addon {
     private String name;
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
-    public Addon(String name, double price) {
+    public Addon(String name, double price,ProductType productType) {
         this.name = name;
         this.price = price;
+        this.productType = productType;
     }
 }

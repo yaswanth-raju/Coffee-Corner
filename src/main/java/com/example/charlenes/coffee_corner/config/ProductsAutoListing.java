@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-class ProductsKickstart {
+class ProductsAutoListing {
 
     @Autowired
     private ProductRepository productRepository;
@@ -24,21 +24,20 @@ class ProductsKickstart {
 
     @PostConstruct
     public void init() {
-        Addon extraMilk = new Addon("Extra Milk", 0.30);
-        Addon foamedMilk = new Addon("Foamed Milk", 0.50);
-        Addon specialRoast = new Addon("Special Roast Coffee", 0.90);
-        List<Addon> addons=Arrays.asList(extraMilk,foamedMilk,specialRoast);
+        Addon extraMilk = new Addon("Extra Milk", 0.30,ProductType.CAFINE);
+        Addon foamedMilk = new Addon("Foamed Milk", 0.50,ProductType.CAFINE);
+        Addon specialRoast = new Addon("Special Roast Coffee", 0.90,ProductType.CAFINE);
+        Addon extraSauce = new Addon("Extra Sauce", 0.10,ProductType.FOOD);
+        Addon extraSweet = new Addon("Extra Sweet", 0.05,ProductType.MOCKTAIL);
+        List<Addon> Addons =Arrays.asList(extraMilk,foamedMilk,specialRoast,extraSauce,extraSweet);
         List<Product> products = Arrays.asList(
-                new Product("Small Coffee", "250ml", 2.50, ProductType.BAVERAGE, null),
-                new Product("Medium Coffee", "350ml", 3.00, ProductType.BAVERAGE, null),
-                new Product("Large Coffee", "450ml", 3.50, ProductType.BAVERAGE, null),
-                new Product("Bacon Roll", "1 roll", 4.50, ProductType.FOOD, null),
-                new Product("Orange Juice", "250ml", 3.95, ProductType.BAVERAGE, null)
-//                new Product("Extra Milk", "N/A", 0.30, ProductType.ADDON, extraMilk),
-//                new Product("Foamed Milk", "N/A", 0.50, ProductType.ADDON, foamedMilk),
-//                new Product("Special Roast Coffee", "N/A", 0.90, ProductType.ADDON, specialRoast)
+                new Product("Small Coffee", "250ml", 2.50, ProductType.CAFINE),
+                new Product("Medium Coffee", "350ml", 3.00, ProductType.CAFINE),
+                new Product("Large Coffee", "450ml", 3.50, ProductType.CAFINE),
+                new Product("Bacon Roll", "1 roll", 4.50, ProductType.FOOD),
+                new Product("Orange Juice", "250ml", 3.95, ProductType.MOCKTAIL)
         );
         productRepository.saveAll(products);
-        addonRepository.saveAll(addons);
+        addonRepository.saveAll(Addons);
     }
 }

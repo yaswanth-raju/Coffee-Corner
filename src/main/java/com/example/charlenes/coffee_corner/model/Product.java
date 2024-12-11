@@ -22,14 +22,10 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
-    private List<Addon> addons;
-
-    public Product(String name, String volume, double price, ProductType productType,List<Addon> addons) {
+    public Product(String name, String volume, double price, ProductType productType) {
         this.name = name;
         this.volume = volume;
         this.price = price;
         this.productType = productType;
-        this.addons = addons;
     }
 }

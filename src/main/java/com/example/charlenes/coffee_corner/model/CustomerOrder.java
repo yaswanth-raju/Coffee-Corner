@@ -22,8 +22,10 @@ public class CustomerOrder {
     private List<OrderItem> orderItems;
 
     private LocalDateTime date;
-    private double totalPrice;
 
+    private Long customerId;
+
+    private double totalPrice;
 
     @PrePersist
     @PreUpdate

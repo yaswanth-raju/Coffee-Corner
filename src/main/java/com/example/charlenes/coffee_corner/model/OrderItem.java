@@ -1,9 +1,13 @@
 package com.example.charlenes.coffee_corner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -16,29 +20,39 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "customer_order_id")
+    @JsonIgnore
     private CustomerOrder customerOrder;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+//    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable( name = "order_item_addon", joinColumns = @JoinColumn(name = "order_item_id"), inverseJoinColumns = @JoinColumn(name = "addon_id") )
+    private List<Addon> addons;
+
     private int quantity;
+
     private double totalPrice;
 
     @PrePersist
     @PreUpdate
     private void calculateTotalPrice() {
         if (product != null) {
-            this.totalPrice = product.getPrice() * quantity;
+            this.totalPrice = getQuantity() *(
+                                product.getPrice()  +
+                                getAddons().stream().map(addon -> addon.getPrice()).collect(Collectors.summingDouble(Double::doubleValue)));
         }
     }
 
     public OrderItem() {}
 
-    public OrderItem(CustomerOrder customerOrder, Product product, int quantity) {
+    public OrderItem(CustomerOrder customerOrder, Product product, int quantity,List<Addon> addons) {
         this.customerOrder = customerOrder;
         this.product = product;
         this.quantity = quantity;
+        this.addons=addons;
         calculateTotalPrice();
     }
 }

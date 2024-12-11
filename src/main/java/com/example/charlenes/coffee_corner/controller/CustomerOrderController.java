@@ -8,15 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ordersRest")
-public class OrderControllerRest {
+@RequestMapping("/customerOrders")
+public class CustomerOrderController {
     @Autowired
     private CoffeeShopService coffeeShopService;
-
-    @PostMapping
-    public CustomerOrder addOrder(@RequestBody CustomerOrder CustomerOrder) {
-        return coffeeShopService.addOrder(CustomerOrder);
-    }
 
     @GetMapping
     public List<CustomerOrder> getAllOrders() {
