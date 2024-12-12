@@ -2,7 +2,7 @@ package com.example.charlenes.coffee_corner.controller;
 
 import com.example.charlenes.coffee_corner.model.CustomerOrder;
 import com.example.charlenes.coffee_corner.service.CoffeeShopService;
-import com.example.charlenes.coffee_corner.service.OrderForm;
+import com.example.charlenes.coffee_corner.forms.OrderForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +44,7 @@ public class OrderController {
     public String showCurrentOrder(Model model) {
         // Assuming we have a method to get the most recent order
         CustomerOrder currentOrder = coffeeShopService.getCurrentOrder();
-        model.addAttribute("currentOrder", currentOrder);
+        model.addAttribute("orders", currentOrder);
         return "currentOrder";
     }
 }

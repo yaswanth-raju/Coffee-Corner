@@ -1,4 +1,4 @@
-package com.example.charlenes.coffee_corner.model;
+package com.example.charlenes.coffee_corner.forms;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +14,5 @@ public class ProductForm {
     private String name;
     private String volume;
     private double price;
-    List<Long> addonIds;
+    List<Long> addons;
 }

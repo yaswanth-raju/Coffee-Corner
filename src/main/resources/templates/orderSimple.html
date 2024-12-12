@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Place Order</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        form {
+            border: 1px solid black;
+            padding: 20px;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        select {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        .addon-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Place Your Order</h1>
+<form id="orderForm" method="post">
+  <h2>Select Products</h2>
+  <table>
+    <tr>
+      <th>Select</th>
+      <th>Name</th>
+      <th>Volume</th>
+      <th>Price</th>
+      <th>Type</th>
+      <th>Addons</th>
+    </tr>
+    <tr th:each="product : ${products}">
+      <td>
+        <input type="checkbox" class="product-checkbox" th:value="${product.id}" th:data-type="${product.productType}" />
+      </td>
+      <td th:text="${product.name}">Name</td>
+      <td th:text="${product.volume}">Volume</td>
+      <td th:text="${product.price}">Price</td>
+      <td th:text="${product.productType}">Type</td>
+      <td>
+        <div th:attr="id='addon_' + ${product.id}" class="addon-section">
+          <select multiple="multiple" th:attr="name='addons_' + ${product.id}" class="addon-select">
+            <option th:each="addon : ${addons}" th:if="${addon.productType} == ${product.productType}" th:value="${addon.id}" th:text="${addon.name}"></option>
+          </select>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <button type="submit">Place Order</button>
+</form>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCheckboxes = document.querySelectorAll('.product-checkbox');
+            productCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const productId = this.value;
+                    const addonSection = document.getElementById(`addon_${productId}`);
+                    if (this.checked) {
+                        addonSection.style.display = 'block';
+                    } else {
+                        addonSection.style.display = 'none';
+                        addonSection.querySelectorAll('select[multiple] option').forEach(option => option.selected = false);
+                    }
+                });
+            });
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let productOrders = [];
+
+            document.querySelectorAll('.product-checkbox:checked').forEach(checkbox => {
+                const productId = parseInt(checkbox.value);
+                const productRow = checkbox.closest('tr');
+                const name = productRow.querySelector('td:nth-child(2)').innerText;
+                const volume = productRow.querySelector('td:nth-child(3)').innerText;
+                const price = parseFloat(productRow.querySelector('td:nth-child(4)').innerText);
+                const productType = productRow.querySelector('td:nth-child(5)').innerText;
+                const selectElement = document.querySelector(`select[name="addons_${productId}"]`);
+                console.log(selectElement); // Log the select element to check if it's found
+
+                if (selectElement !== null) {
+                    const selectedAddons = Array.from(selectElement.selectedOptions).map(option => parseInt(option.value));
+                    productOrders.push({
+                        id: productId,
+                        name: name,
+                        volume: volume,
+                        price: price,
+                        productType: productType,
+                        addonIds: selectedAddons.length ? selectedAddons : null
+                    });
+                } else {
+                    console.warn(`Select element for product ${productId} is not found`);
+                }
+            });
+
+            console.log(productOrders); // Log the product orders to check the data
+
+            fetch('/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productOrders: productOrders })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Order placed successfully!');
+                } else {
+                    alert('Failed to place order.');
+                }
+            }).catch(error => {
+                alert('An error occurred: ' + error.message);
+            });
+        });
+    </script>
+
+<h2>Navigation</h2>
+<a href="/products">Go to Products Page</a>
+</body>
+</html>

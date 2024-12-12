@@ -84,13 +84,15 @@
 </head>
 <body>
 <div class="container">
-    <h1>List of Orders</h1>
+    <h1>Charlene's Coffee Corner</h1>
+    <h2>Orders List</h2>
     <div th:each="order : ${orders}" class="order">
         <div class="order-header">
             <h2>Order ID: <span th:text="${order.id}"></span></h2>
             <p>
                 Date: <span th:text="${order.date}"></span><br />
-                Customer ID: <span th:text="${order.customerId}"></span><br />
+                Customer ID: <span th:text="${order.id}"></span><br />
+                Customer Name: <span th:text="${order.customerName}"></span><br />
                 Total Price: <span th:text="${order.totalPrice}"></span> CHF
             </p>
         </div>

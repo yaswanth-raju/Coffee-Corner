@@ -1,8 +1,8 @@
 package com.example.charlenes.coffee_corner.config;
 
 
-import com.example.charlenes.coffee_corner.dao.AddonRepository;
-import com.example.charlenes.coffee_corner.dao.ProductRepository;
+import com.example.charlenes.coffee_corner.repository.AddonRepository;
+import com.example.charlenes.coffee_corner.repository.ProductRepository;
 import com.example.charlenes.coffee_corner.model.Addon;
 import com.example.charlenes.coffee_corner.model.Product;
 import com.example.charlenes.coffee_corner.model.ProductType;

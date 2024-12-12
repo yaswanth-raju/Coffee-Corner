@@ -1,4 +1,4 @@
-package com.example.charlenes.coffee_corner.dao;
+package com.example.charlenes.coffee_corner.repository;
 
 import com.example.charlenes.coffee_corner.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

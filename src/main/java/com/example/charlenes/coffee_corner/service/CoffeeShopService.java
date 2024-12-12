@@ -1,8 +1,10 @@
 package com.example.charlenes.coffee_corner.service;
 
-import com.example.charlenes.coffee_corner.dao.AddonRepository;
-import com.example.charlenes.coffee_corner.dao.CustomerOrderRepository;
-import com.example.charlenes.coffee_corner.dao.ProductRepository;
+import com.example.charlenes.coffee_corner.repository.AddonRepository;
+import com.example.charlenes.coffee_corner.repository.CustomerOrderRepository;
+import com.example.charlenes.coffee_corner.repository.ProductRepository;
+import com.example.charlenes.coffee_corner.forms.OrderForm;
+import com.example.charlenes.coffee_corner.forms.ProductForm;
 import com.example.charlenes.coffee_corner.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -53,18 +54,19 @@ public class CoffeeShopService {
     }
 
     public void placeOrder(OrderForm orderForm) {
-        List<OrderItem> orderItems = new ArrayList<>();
         CustomerOrder customerOrder = new CustomerOrder();
+        customerOrder.setCustomerName(orderForm.getCustomerName());
+        customerOrder.setCustomerContact(orderForm.getCustomerContact());
 
+        List<OrderItem> orderItems = new ArrayList<>();
         for (ProductForm productForm : orderForm.getProductOrders()) {
             Product product = productRepository.findById(productForm.getId()).orElse(null);
             if (product != null) {
-                orderItems.add(new OrderItem(customerOrder, product, 1,getAddonsList(productForm.getAddonIds()))); // Add product item with quantity 1
+                orderItems.add(new OrderItem( product, 1,getAddonsList(productForm.getAddons()))); // Add product item with quantity 1
             }
         }
-
         customerOrder.setOrderItems(orderItems);
-        customerOrder.setCustomerId(1l);
+
         customerOrderRepository.save(customerOrder);
     }
 

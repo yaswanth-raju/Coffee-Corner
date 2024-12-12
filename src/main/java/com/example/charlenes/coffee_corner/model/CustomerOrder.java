@@ -1,6 +1,5 @@
 package com.example.charlenes.coffee_corner.model;
 
-import com.example.charlenes.coffee_corner.service.OrderForm;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,12 +17,17 @@ public class CustomerOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
+//    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
+//    private List<OrderItem> orderItems;
+
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "customer_order_id") // Foreign key column in OrderItem table
+     private List<OrderItem> orderItems;
 
     private LocalDateTime date;
 
-    private Long customerId;
+    private Long customerContact;
+
+    private String customerName;
 
     private double totalPrice;
 

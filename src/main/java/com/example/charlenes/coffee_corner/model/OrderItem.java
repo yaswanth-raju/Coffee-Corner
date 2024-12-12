@@ -18,10 +18,10 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_order_id")
-    @JsonIgnore
-    private CustomerOrder customerOrder;
+//    @ManyToOne
+//    @JoinColumn(name = "customer_order_id")
+//    @JsonIgnore
+//    private CustomerOrder customerOrder;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -29,7 +29,9 @@ public class OrderItem {
 
 //    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
     @ManyToMany
-    @JoinTable( name = "order_item_addon", joinColumns = @JoinColumn(name = "order_item_id"), inverseJoinColumns = @JoinColumn(name = "addon_id") )
+    @JoinTable( name = "order_item_addon",
+            joinColumns = @JoinColumn(name = "order_item_id"),
+            inverseJoinColumns = @JoinColumn(name = "addon_id") )
     private List<Addon> addons;
 
     private int quantity;
@@ -48,8 +50,9 @@ public class OrderItem {
 
     public OrderItem() {}
 
-    public OrderItem(CustomerOrder customerOrder, Product product, int quantity,List<Addon> addons) {
-        this.customerOrder = customerOrder;
+    public OrderItem( Product product, int quantity,List<Addon> addons) {
+//        CustomerOrder customerOrder,
+//        this.customerOrder = customerOrder;
         this.product = product;
         this.quantity = quantity;
         this.addons=addons;

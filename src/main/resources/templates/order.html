@@ -1,77 +1,123 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Place Order</title>
-  <style>
+    <title>Place Order</title>
+    <style>
         body {
-            font-family: Arial, sans-serif;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        form {
-            border: 1px solid black;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
             padding: 20px;
         }
-        input[type="checkbox"] {
-            margin-right: 10px;
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        select {
-            width: 100%;
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .order-form {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .order-header {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
             margin-bottom: 10px;
         }
-        button {
-            display: block;
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
+        .order-item-content {
+            display: flex;
+            justify-content: space-between;
         }
-        .addon-section {
-            display: none;
+        .order-item-details, .order-addons {
+            width: 48%;
+        }
+        .order-item-details p, .order-addons ul {
+            margin: 5px 0;
+        }
+        .order-addons ul {
+            list-style: none;
+            padding: 0;
+        }
+        .order-addons li {
+            background: #e0f7fa;
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .item-total {
+            font-weight: bold;
+            color: #ff5722;
+            margin-top: 10px;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .navigation a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-<h1>Place Your Order</h1>
-<form id="orderForm" th:action="@{/orders}" th:object="${orderForm}" method="post">
-  <h2>Select Products</h2>
-  <table>
-    <tr>
-      <th>Select</th>
-      <th>Name</th>
-      <th>Volume</th>
-      <th>Price</th>
-      <th>Type</th>
-      <th>Addons</th>
-    </tr>
-    <tr th:each="product : ${products}">
-      <td>
-        <input type="checkbox" class="product-checkbox" th:value="${product.id}" />
-      </td>
-      <td th:text="${product.name}">Name</td>
-      <td th:text="${product.volume}">Volume</td>
-      <td th:text="${product.price}">Price</td>
-      <td th:text="${product.productType}">Type</td>
-      <td>
-        <div th:attr="id='addon_' + ${product.id}" class="addon-section">
-          <select multiple="multiple" th:attr="name='addons_' + ${product.id}">
-            <option th:each="addon : ${addons}" th:value="${addon.id}" th:text="${addon.name}"></option>
-          </select>
+<div class="container">
+    h1>Charlene's Coffee Corner</h1>
+    <h2>Place Your Order</h2>
+    <form id="orderForm" th:action="@{/orders}" th:object="${orderForm}" method="post" class="order-form">
+        <div class="order-header">
+            <h2>Customer Details</h2>
+            <label for="customerName">Name:</label>
+            <input type="text" id="customerName" name="customerName" th:field="*{customerName}" required>
+            <br/>
+            <label for="customerContact">Contact Number:</label>
+            <input type="text" id="customerContact" name="customerContact" th:field="*{customerContact}" required>
         </div>
-      </td>
-    </tr>
-  </table>
-  <button type="submit">Place Order</button>
-</form>
+        <div class="order-header">
+            <h2>Select Products</h2>
+        </div>
+        <table>
+            <tr>
+                <th>Select</th>
+                <th>Name</th>
+                <th>Volume</th>
+                <th>Price</th>
+                <th>Type</th>
+                <th>Addons</th>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td>
+                    <input type="checkbox" class="product-checkbox" th:value="${product.id}" th:data-type="${product.productType}" />
+                </td>
+                <td th:text="${product.name}">Name</td>
+                <td th:text="${product.volume}">Volume</td>
+                <td th:text="${product.price}">Price</td>
+                <td th:text="${product.productType}">Type</td>
+                <td>
+                    <div th:attr="id='addon_' + ${product.id}" class="addon-section">
+                        <select multiple="multiple" th:attr="name='addons_' + ${product.id}" class="addon-select">
+                            <option th:each="addon : ${addons}" th:if="${addon.productType} == ${product.productType}" th:value="${addon.id}" th:text="${addon.name}"></option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Place Order</button>
+    </form>
+
+    <div class="navigation">
+        <a href="/orders/list">Go to Orders List</a>
+    </div>
+</div>
 
 <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -93,6 +139,8 @@
         document.getElementById('orderForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
+            let customerContact = document.getElementById('customerContact').value;
+            let customerName = document.getElementById('customerName').value;
             let productOrders = [];
 
             document.querySelectorAll('.product-checkbox:checked').forEach(checkbox => {
@@ -127,20 +175,17 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ productOrders: productOrders })
+                body: JSON.stringify({ customerContact: customerContact, customerName: customerName, productOrders: productOrders })
             }).then(response => {
                 if (response.ok) {
-                    alert('Order placed successfully!');
+                    window.location.href = '/orders/current'; // Redirect to current order summary page
                 } else {
-                    alert('Failed to place order.');
+                    console.error('Failed to place order.');
                 }
             }).catch(error => {
-                alert('An error occurred: ' + error.message);
+                console.error('An error occurred: ' + error.message);
             });
         });
     </script>
-
-<h2>Navigation</h2>
-<a href="/products">Go to Products Page</a>
 </body>
 </html>
