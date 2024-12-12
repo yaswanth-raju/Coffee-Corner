@@ -71,7 +71,7 @@
 </head>
 <body>
 <div class="container">
-    h1>Charlene's Coffee Corner</h1>
+    <h1>Charlene's Coffee Corner</h1>
     <h2>Place Your Order</h2>
     <form id="orderForm" th:action="@{/orders}" th:object="${orderForm}" method="post" class="order-form">
         <div class="order-header">
@@ -114,6 +114,9 @@
         <button type="submit">Place Order</button>
     </form>
 
+    <div class="navigation">
+        <a href="/orders/current">View last Order</a>
+    </div>
     <div class="navigation">
         <a href="/orders/list">Go to Orders List</a>
     </div>

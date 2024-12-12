@@ -27,11 +27,11 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-//    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
+    //    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
     @ManyToMany
-    @JoinTable( name = "order_item_addon",
+    @JoinTable(name = "order_item_addon",
             joinColumns = @JoinColumn(name = "order_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "addon_id") )
+            inverseJoinColumns = @JoinColumn(name = "addon_id"))
     private List<Addon> addons;
 
     private int quantity;
@@ -42,20 +42,19 @@ public class OrderItem {
     @PreUpdate
     private void calculateTotalPrice() {
         if (product != null) {
-            this.totalPrice = getQuantity() *(
-                                product.getPrice()  +
-                                getAddons().stream().map(addon -> addon.getPrice()).collect(Collectors.summingDouble(Double::doubleValue)));
+            this.totalPrice = getQuantity() * (
+                    product.getPrice() +
+                            getAddons().stream().map(addon -> addon.getPrice()).collect(Collectors.summingDouble(Double::doubleValue)));
         }
     }
 
-    public OrderItem() {}
+    private OrderItem() {
+    }
 
-    public OrderItem( Product product, int quantity,List<Addon> addons) {
-//        CustomerOrder customerOrder,
-//        this.customerOrder = customerOrder;
+    public OrderItem(Product product, int quantity, List<Addon> addons) {
         this.product = product;
         this.quantity = quantity;
-        this.addons=addons;
+        this.addons = addons;
         calculateTotalPrice();
     }
 }
