@@ -84,17 +84,21 @@
 </head>
 <body>
 <div class="container">
-    <h1>Charlene's Coffee Corner</h1>
-    <h2>Orders List</h2>
+    <h1>List of Orders</h1>
     <div th:each="order : ${orders}" class="order">
         <div class="order-header">
             <h2>Order ID: <span th:text="${order.id}"></span></h2>
             <p>
                 Date: <span th:text="${order.date}"></span><br />
-                Customer ID: <span th:text="${order.id}"></span><br />
                 Customer Name: <span th:text="${order.customerName}"></span><br />
-                Total Price: <span th:text="${order.totalPrice}"></span> CHF
+                Customer Contact: <span th:text="${order.customerContact}"></span><br />
+                Total Price: $<span th:text="${order.totalPrice}"></span>
             </p>
+            <div th:if="${order.isDiscountEligble}">
+                <p>Discount: <span th:text="${order.discountDescription}"></span></p>
+                <p>Discount Amount: $<span th:text="${order.discountAmount}"></span></p>
+                <p>Total Price After Discount: $<span th:text="${order.totalPriceAfterDiscount}"></span></p>
+            </div>
         </div>
         <div th:each="item : ${order.orderItems}" class="order-item">
             <div class="order-item-content">
@@ -102,26 +106,23 @@
                     <p>
                         <strong>Product:</strong> <span th:text="${item.product.name}"></span><br />
                         Volume: <span th:text="${item.product.volume}"></span><br />
-                        Price: <span th:text="${item.product.price}"></span> CHF<br />
+                        Price: $<span th:text="${item.product.price}"></span><br />
                         Quantity: <span th:text="${item.quantity}"></span>
                     </p>
                 </div>
                 <div th:if="${item.addons != null && !item.addons.isEmpty()}" class="order-addons">
                     <h4>Addons:</h4>
                     <ul>
-                        <li th:each="addon : ${item.addons}" th:text="${addon.name} + ' -' + ${addon.price}+' CHF'"></li>
+                        <li th:each="addon : ${item.addons}" th:text="${addon.name} + ' - $' + ${addon.price}"></li>
                     </ul>
                 </div>
             </div>
-            <p class="item-total">Item Total Price: <span th:text="${item.totalPrice}"></span> CHF</p>
+            <p class="item-total">Item Total Price: $<span th:text="${item.totalPrice}"></span></p>
         </div>
     </div>
 
     <div class="navigation">
         <a href="/orders">Place a New Order</a>
-    </div>
-    <div class="navigation">
-        <a href="/orders/current">View last Order</a>
     </div>
 </div>
 </body>

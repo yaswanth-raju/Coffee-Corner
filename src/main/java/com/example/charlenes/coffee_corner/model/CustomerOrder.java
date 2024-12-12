@@ -31,9 +31,17 @@ public class CustomerOrder {
 
     private double totalPrice;
 
+    private Boolean isDiscountEligble =false;
+
+    private String discountDescription;
+
+    private  double discountAmount;
+
+    private double totalPriceAfterDiscount;
+
     @PrePersist
     @PreUpdate
-    private void calculateTotalPrice() {
+    public void calculateTotalPrice() {
         this.totalPrice = orderItems.stream().mapToDouble(OrderItem::getTotalPrice).sum();
         this.date = LocalDateTime.now();
     }
